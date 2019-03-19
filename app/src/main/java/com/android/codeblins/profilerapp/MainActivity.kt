@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity(), TextWatcher {
 
         StatsWindowBuilder(this)
             .type(StatTrackType.NETWORK)
+            .withLogs()
             .create()
     }
 

@@ -6,4 +6,6 @@ package com.android.codeblins.statinspector.models
 data class NetworkStatsModel(val rx: StatByte, val rt: StatByte) {
     val total: StatByte
         get() = StatByte(rx.value + rt.value)
+
+    override fun toString(): String = "Received: ${rx.text} \n Transmitted: ${rt.text}"
 }

@@ -17,7 +17,14 @@ import kotlinx.android.synthetic.main.window_stat_info.*
  */
 class StatsWindow : Fragment() {
     companion object {
-        fun newInstance() = StatsWindow()
+
+        const val ARGS_HAS_LOGS = "ARGS_HAS_LOGS"
+
+        fun newInstance(args: Bundle): StatsWindow {
+            val fragment = StatsWindow()
+            fragment.arguments = args
+            return fragment
+        }
     }
 
     private var disposableStatSubscription: Disposable? = null
@@ -29,7 +36,9 @@ class StatsWindow : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        StatInspector.init(activity?.applicationInfo?.uid ?: -1)
+        val hasLogs = arguments?.getBoolean(ARGS_HAS_LOGS) ?: false
+
+        StatInspector.init(activity?.applicationInfo?.uid ?: -1, hasLogs)
         StatInspector.startInspection()
     }
 
