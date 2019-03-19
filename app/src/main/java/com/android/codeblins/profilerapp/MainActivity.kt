@@ -1,5 +1,7 @@
 package com.android.codeblins.profilerapp
 
+import android.app.ActivityManager
+import android.content.Context
 import android.net.TrafficStats
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -53,6 +55,13 @@ class MainActivity : AppCompatActivity(), TextWatcher {
                 (recycler.adapter as RepoAdapter).submitList(response.body())
             }
         })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        (getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
+            .clearApplicationUserData()
     }
 }
 

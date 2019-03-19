@@ -26,6 +26,18 @@ class StatsWindow : Fragment() {
         return inflater.inflate(R.layout.window_stat_info, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        StatInspector.init(activity?.applicationInfo?.uid ?: -1)
+        StatInspector.startInspection()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        StatInspector.stopInspection()
+    }
+
     override fun onStart() {
         super.onStart()
 
@@ -34,14 +46,10 @@ class StatsWindow : Fragment() {
         }, {
             Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
         })
-
-        StatInspector.startInspection(activity?.applicationInfo?.uid ?: -1)
     }
 
     override fun onStop() {
         super.onStop()
-
-        StatInspector.stopInspection()
         disposableStatSubscription?.dispose()
     }
 
