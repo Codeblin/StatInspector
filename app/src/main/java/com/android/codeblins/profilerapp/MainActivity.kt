@@ -2,23 +2,20 @@ package com.android.codeblins.profilerapp
 
 import android.app.ActivityManager
 import android.content.Context
-import android.net.TrafficStats
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.android.codeblins.StatTrackType
 import com.android.codeblins.StatsWindowBuilder
 import com.android.codeblins.profilerapp.apiclient.ApiManager
+import com.android.codeblins.profilerapp.apiclient.GitHubService
 import com.android.codeblins.profilerapp.models.Repo
 import com.android.codeblins.profilerapp.ui.RepoAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import com.android.codeblins.profilerapp.apiclient.GitHubService
 
 
 class MainActivity : AppCompatActivity(), TextWatcher {
