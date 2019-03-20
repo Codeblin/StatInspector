@@ -41,7 +41,6 @@ class StatsWindowBuilder(private val context: Context) {
             context.supportFragmentManager
                 .beginTransaction()
                 .add(android.R.id.content, StatsWindow.newInstance(args))
-                .addToBackStack(null)
                 .commit()
         }else{
             throw IllegalContextException("FragmentActivity is required for context")
