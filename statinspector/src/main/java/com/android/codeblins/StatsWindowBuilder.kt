@@ -1,6 +1,5 @@
 package com.android.codeblins
 
-import android.app.usage.NetworkStatsManager
 import android.content.Context
 import androidx.fragment.app.FragmentActivity
 import com.android.codeblins.statinspector.views.StatsWindow
@@ -31,7 +30,6 @@ class StatsWindowBuilder(private val context: Context) {
             context.supportFragmentManager
                 .beginTransaction()
                 .add(android.R.id.content, StatsWindow.newInstance())
-                .addToBackStack(null)
                 .commit()
         }else{
             throw IllegalContextException("FragmentActivity is required for context")
