@@ -7,47 +7,38 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.android.codeblins.core.Initializator
-import com.android.codeblins.core.Initializator.Companion.ARGS_HAS_LOGS
 import com.android.codeblins.core.StatInspector
-import com.android.codeblins.statinspector.R
-import com.android.codeblins.statinspector.models.NetworkStatsModel
+import com.android.codeblins.statinspector.models.BaseStatModel
 import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.window_stat_info.*
 
 /**
- * Created by Codeblin S. on 3/10/2019.
+ * Created by Codeblin S. on 3/20/2019.
  */
-class StatsWindow : Fragment() {
-    companion object : Initializator()
 
+abstract class BaseFragment: Fragment(){
     private var disposableStatSubscription: Disposable? = null
 
+    abstract fun getLayoutId(): Int
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.window_stat_info, container, false)
+        return inflater.inflate(getLayoutId(), container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val hasLogs = arguments?.getBoolean(ARGS_HAS_LOGS) ?: false
+        val hasLogs = arguments?.getBoolean(Initializator.ARGS_HAS_LOGS) ?: false
 
         StatInspector.init(activity?.applicationInfo?.uid ?: -1, hasLogs)
         StatInspector.startInspection()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        StatInspector.stopInspection()
-    }
+    abstract fun getDisposable() : Disposable
 
     override fun onStart() {
         super.onStart()
 
-        disposableStatSubscription = StatInspector.statSubject.subscribe({
-            setNetworkTraffic(it)
-        }, {
-            Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
-        })
+        disposableStatSubscription = getDisposable()
     }
 
     override fun onStop() {
@@ -55,7 +46,8 @@ class StatsWindow : Fragment() {
         disposableStatSubscription?.dispose()
     }
 
-    private fun setNetworkTraffic(model: NetworkStatsModel){
-        txtGeneralTitle.text = "Received: ${model.rx.text} \n Transmitted: ${model.rt.text}"
+    override fun onDestroyView() {
+        super.onDestroyView()
+        StatInspector.stopInspection()
     }
 }

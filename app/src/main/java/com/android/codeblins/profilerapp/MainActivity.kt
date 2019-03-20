@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
-import com.android.codeblins.StatTrackType
-import com.android.codeblins.StatsWindowBuilder
+import com.android.codeblins.builders.NetworkStatWindowBuilder
+import com.android.codeblins.builders.StatsWindowBuilder
 import com.android.codeblins.profilerapp.apiclient.ApiManager
 import com.android.codeblins.profilerapp.apiclient.GitHubService
 import com.android.codeblins.profilerapp.models.Repo
@@ -27,9 +27,7 @@ class MainActivity : AppCompatActivity(), TextWatcher {
         etUserRepo.addTextChangedListener(this)
         recycler.adapter = RepoAdapter()
 
-        StatsWindowBuilder(this)
-            .type(StatTrackType.NETWORK)
-            .withLogs()
+        NetworkStatWindowBuilder(this)
             .create()
     }
 

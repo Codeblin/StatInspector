@@ -1,4 +1,4 @@
-package com.android.codeblins.statinspector
+package com.android.codeblins.core
 
 import android.net.TrafficStats
 import com.android.codeblins.logging.StatsLogger
@@ -33,7 +33,7 @@ object StatInspector{
         statLogger =  StatsLogger(withLog)
         startRxBytes = TrafficStats.getUidRxBytes(uid)
         startTxBytes = TrafficStats.getUidTxBytes(uid)
-        this.uid = uid
+        StatInspector.uid = uid
 
         if (startRxBytes.toInt() == TrafficStats.UNSUPPORTED || startRxBytes.toInt() == TrafficStats.UNSUPPORTED) {
             statSubject.onError(Exception("Your device doesn't support traffic monitor"))
