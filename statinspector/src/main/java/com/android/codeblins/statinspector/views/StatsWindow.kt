@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.android.codeblins.core.Initializator
 import com.android.codeblins.core.Initializator.Companion.ARGS_HAS_LOGS
-import com.android.codeblins.core.StatInspector
+import com.android.codeblins.core.NetworkStatInspector
 import com.android.codeblins.statinspector.R
 import com.android.codeblins.statinspector.models.NetworkStatsModel
 import io.reactivex.disposables.Disposable
@@ -17,45 +17,15 @@ import kotlinx.android.synthetic.main.window_stat_info.*
 /**
  * Created by Codeblin S. on 3/10/2019.
  */
-class StatsWindow : Fragment() {
-    companion object : Initializator()
+class StatsWindow : BaseFragment() {
 
-    private var disposableStatSubscription: Disposable? = null
+    companion object: Initializator()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.window_stat_info, container, false)
-    }
+    override fun getLayoutId(): Int = R.layout.window_stat_info
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val hasLogs = arguments?.getBoolean(ARGS_HAS_LOGS) ?: false
-
-        StatInspector.init(activity?.applicationInfo?.uid ?: -1, hasLogs)
-        StatInspector.startInspection()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        StatInspector.stopInspection()
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        disposableStatSubscription = StatInspector.statSubject.subscribe({
-            setNetworkTraffic(it)
-        }, {
-            Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
-        })
-    }
-
-    override fun onStop() {
-        super.onStop()
-        disposableStatSubscription?.dispose()
-    }
-
-    private fun setNetworkTraffic(model: NetworkStatsModel){
-        txtGeneralTitle.text = "Received: ${model.rx.text} \n Transmitted: ${model.rt.text}"
-    }
+    override fun getDisposable(): Disposable = NetworkStatInspector.statSubject.subscribe({
+        // do something
+    }, {
+        Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+    })
 }

@@ -5,7 +5,7 @@ import com.android.codeblins.statinspector.BuildConfig
 
 class StatsLogger(private val enabled: Boolean = false) {
 
-    private val TAG = "StatInspector"
+    private val TAG = "NetworkStatInspector"
 
     private fun log(action: () -> Unit){
         if (BuildConfig.DEBUG && enabled){

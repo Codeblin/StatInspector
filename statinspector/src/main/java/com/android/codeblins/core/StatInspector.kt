@@ -2,6 +2,7 @@ package com.android.codeblins.core
 
 import android.net.TrafficStats
 import com.android.codeblins.logging.StatsLogger
+import com.android.codeblins.statinspector.models.BaseStatModel
 import com.android.codeblins.statinspector.models.NetworkStatsModel
 import com.android.codeblins.statinspector.models.StatByte
 import io.reactivex.Observable
@@ -11,36 +12,31 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit
 
-
 /**
- * Created by Codeblin S. on 3/10/2019.
+ * Created by Codeblin S. on 3/24/2019.
  */
 
-object StatInspector{
-    private const val INSPECTION_TICKS = 300L
+abstract class StatInspector{
+    private val INSPECTION_TICKS = 300L
 
-    private var startRxBytes: Long = 0
-    private var startTxBytes: Long = 0
-    private var uid: Int = 0
+    protected var uid: Int = 0
 
-    private lateinit var statLogger: StatsLogger
+    protected lateinit var statLogger: StatsLogger
 
-    private var statInspectionDisposable: Disposable? = null
+    protected var statInspectionDisposable: Disposable? = null
 
-    val statSubject: BehaviorSubject<NetworkStatsModel> = BehaviorSubject.create()
+    val statSubject: BehaviorSubject<BaseStatModel> = BehaviorSubject.create()
+
+    abstract fun initializeInspection()
 
     fun init(uid: Int, withLog: Boolean = false){
-        statLogger =  StatsLogger(withLog)
-        startRxBytes = TrafficStats.getUidRxBytes(uid)
-        startTxBytes = TrafficStats.getUidTxBytes(uid)
-        StatInspector.uid = uid
+        this.statLogger =  StatsLogger(withLog)
+        this.uid = uid
 
-        if (startRxBytes.toInt() == TrafficStats.UNSUPPORTED || startRxBytes.toInt() == TrafficStats.UNSUPPORTED) {
-            statSubject.onError(Exception("Your device doesn't support traffic monitor"))
-            statLogger.logError("On Initialization", "Your device doesn't support traffic monitor")
-            return
-        }
+        initializeInspection()
     }
+
+    abstract fun calculationAction(): BaseStatModel
 
     fun startInspection(){
         statLogger.logInfo(infoMessage = "Inspection Starts...")
@@ -50,9 +46,7 @@ object StatInspector{
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe{
-                val rxBytes = StatByte(TrafficStats.getUidRxBytes(uid) - startRxBytes)
-                val txBytes = StatByte(TrafficStats.getUidTxBytes(uid)- startTxBytes)
-                val model = NetworkStatsModel(rxBytes, txBytes)
+                val model = calculationAction()
 
                 statSubject.onNext(model)
                 statLogger.logInfo("Network Traffic", model.toString())

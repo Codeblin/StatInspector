@@ -4,11 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.android.codeblins.core.Initializator
-import com.android.codeblins.core.StatInspector
-import com.android.codeblins.statinspector.models.BaseStatModel
+import com.android.codeblins.core.NetworkStatInspector
 import io.reactivex.disposables.Disposable
 
 /**
@@ -29,8 +27,8 @@ abstract class BaseFragment: Fragment(){
 
         val hasLogs = arguments?.getBoolean(Initializator.ARGS_HAS_LOGS) ?: false
 
-        StatInspector.init(activity?.applicationInfo?.uid ?: -1, hasLogs)
-        StatInspector.startInspection()
+        NetworkStatInspector.init(activity?.applicationInfo?.uid ?: -1, hasLogs)
+        NetworkStatInspector.startInspection()
     }
 
     abstract fun getDisposable() : Disposable
@@ -48,6 +46,6 @@ abstract class BaseFragment: Fragment(){
 
     override fun onDestroyView() {
         super.onDestroyView()
-        StatInspector.stopInspection()
+        NetworkStatInspector.stopInspection()
     }
 }
