@@ -3,7 +3,7 @@ package com.android.codeblins.builders
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.android.codeblins.statinspector.views.StatsWindow
+import com.android.codeblins.views.StatsWindow
 
 /**
  * Created by Codeblin S. on 3/10/2019.

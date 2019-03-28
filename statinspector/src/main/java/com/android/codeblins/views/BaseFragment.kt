@@ -1,4 +1,4 @@
-package com.android.codeblins.statinspector.views
+package com.android.codeblins.views
 
 import android.os.Bundle
 import android.view.LayoutInflater

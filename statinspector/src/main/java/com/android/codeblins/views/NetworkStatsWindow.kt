@@ -1,10 +1,10 @@
-package com.android.codeblins.statinspector.views
+package com.android.codeblins.views
 
 import android.widget.Toast
 import com.android.codeblins.core.Initializator
 import com.android.codeblins.core.NetworkStatInspector
 import com.android.codeblins.statinspector.R
-import com.android.codeblins.statinspector.models.NetworkStatsModel
+import com.android.codeblins.models.NetworkStatsModel
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.window_network_stat_info.*
 

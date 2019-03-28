@@ -1,4 +1,4 @@
-package com.android.codeblins.statinspector.models
+package com.android.codeblins.models
 
 /**
  * Created by Codeblin S. on 3/20/2019.

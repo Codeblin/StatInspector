@@ -24,10 +24,11 @@ abstract class InspectorWindowBuilder(private val context: Context) : InspectorW
 
     abstract fun getWindowWithArguments(args: Bundle): Fragment
 
+    abstract fun getExtraArguments(): Bundle
+
     override fun create() {
-        val args = Bundle().apply {
-            putBoolean(ARGS_HAS_LOGS, logs)
-        }
+        val args = getExtraArguments()
+        args.putBoolean(ARGS_HAS_LOGS, logs)
 
         if (context is FragmentActivity){
             context.supportFragmentManager

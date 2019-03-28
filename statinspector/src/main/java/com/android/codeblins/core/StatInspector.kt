@@ -1,10 +1,7 @@
 package com.android.codeblins.core
 
-import android.net.TrafficStats
 import com.android.codeblins.logging.StatsLogger
-import com.android.codeblins.statinspector.models.BaseStatModel
-import com.android.codeblins.statinspector.models.NetworkStatsModel
-import com.android.codeblins.statinspector.models.StatByte
+import com.android.codeblins.models.BaseStatModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

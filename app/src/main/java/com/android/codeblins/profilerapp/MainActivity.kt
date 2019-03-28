@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
 import com.android.codeblins.builders.NetworkStatWindowBuilder
 import com.android.codeblins.builders.StatsWindowBuilder
+import com.android.codeblins.models.NetworkTrackOptions
 import com.android.codeblins.profilerapp.apiclient.ApiManager
 import com.android.codeblins.profilerapp.apiclient.GitHubService
 import com.android.codeblins.profilerapp.models.Repo

@@ -1,4 +1,4 @@
-package com.android.codeblins.statinspector.models
+package com.android.codeblins.models
 
 import java.text.DecimalFormat
 
