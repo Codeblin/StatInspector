@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
 import com.android.codeblins.core.Initializator
 import com.android.codeblins.core.NetworkStatInspector
 import com.android.codeblins.statinspector.R
-import com.android.codeblins.utils.Animations
+import com.android.codeblins.utils.*
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.window_base.*
 
@@ -16,19 +17,41 @@ import kotlinx.android.synthetic.main.window_base.*
  * Created by Codeblin S. on 3/20/2019.
  */
 
-abstract class BaseFragment: Fragment(), View.OnClickListener{
+abstract class BaseFragment: Fragment(), View.OnClickListener, OnSwipeTouchListener.SwipeDirectionListener {
     private var disposableStatSubscription: Disposable? = null
     protected var isShown = true
+
+    // =====================================================
+    // Abstracts
+    // =====================================================
 
     abstract fun getLayoutId(): Int
 
     abstract fun getTitle(): String?
 
+    abstract fun initLayout(view: View)
+
+    abstract fun getDisposable() : Disposable
+
+    // =====================================================
+    // Lifecycle
+    // =====================================================
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.window_base, container, false)
     }
 
-    abstract fun initLayout(view: View)
+    // Initializes base window layout functionality
+    private fun baseLayoutInit(){
+        frameBaseContent.addView(LayoutInflater.from(context).inflate(getLayoutId(), null, false))
+        txtBaseTitle.text = getTitle()
+
+        imgBaseArrow.setOnClickListener(this)
+
+        context?.let {
+            view?.setOnTouchListener(OnSwipeTouchListener(it, this))
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,19 +61,14 @@ abstract class BaseFragment: Fragment(), View.OnClickListener{
         NetworkStatInspector.init(activity?.applicationInfo?.uid ?: -1, hasLogs)
         NetworkStatInspector.startInspection()
 
-        frameBaseContent.addView(LayoutInflater.from(context).inflate(getLayoutId(), null, false))
-        txtBaseTitle.text = getTitle()
+        baseLayoutInit()
 
-        imgBaseArrow.setOnClickListener(this)
-
+        // Child fragment initializes its layout views here
         initLayout(view)
     }
 
-    abstract fun getDisposable() : Disposable
-
     override fun onStart() {
         super.onStart()
-
         disposableStatSubscription = getDisposable()
     }
 
@@ -63,6 +81,10 @@ abstract class BaseFragment: Fragment(), View.OnClickListener{
         super.onDestroyView()
         NetworkStatInspector.stopInspection()
     }
+
+    // =====================================================
+    // Actions
+    // =====================================================
 
     private fun showMonitor(show: Boolean){
         val radius = if(show) 180f else 0f
@@ -82,5 +104,10 @@ abstract class BaseFragment: Fragment(), View.OnClickListener{
                 showMonitor(isShown)
             }
         }
+    }
+
+    override fun onSwipe(direction: Direction) {
+        isShown = direction == Direction.DOWN
+        showMonitor(isShown)
     }
 }
