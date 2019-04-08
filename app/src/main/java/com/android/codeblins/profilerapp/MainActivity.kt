@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity(), TextWatcher {
         recycler.adapter = RepoAdapter()
 
         NetworkStatWindowBuilder(this)
+            .trackingOptions(NetworkTrackOptions.Full)
             .create()
     }
 

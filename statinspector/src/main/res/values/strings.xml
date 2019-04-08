@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">StatInspector</string>
+
+    <string name="title_traffic_monitor">Traffic Monitor</string>
+    <string name="received">Received:</string>
+    <string name="transmitted">Transmitted:</string>
 </resources>

@@ -12,5 +12,7 @@ import com.android.codeblins.views.StatsWindow
 class IllegalContextException(message: String): Exception(message)
 
 class StatsWindowBuilder(context: Context): InspectorWindowBuilder(context) {
+    override fun getExtraArguments(): Bundle = Bundle()
+
     override fun getWindowWithArguments(args: Bundle): Fragment = StatsWindow.newInstance<StatsWindow>(args)
 }
