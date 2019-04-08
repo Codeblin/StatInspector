@@ -1,9 +1,13 @@
 package com.android.codeblins.views
 
+import android.os.Build
 import android.os.Bundle
+import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
 import com.android.codeblins.core.Initializator
@@ -12,6 +16,11 @@ import com.android.codeblins.statinspector.R
 import com.android.codeblins.utils.*
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.window_base.*
+import android.view.Gravity
+import android.R.attr.gravity
+import android.widget.FrameLayout
+
+
 
 /**
  * Created by Codeblin S. on 3/20/2019.
@@ -51,6 +60,8 @@ abstract class BaseFragment: Fragment(), View.OnClickListener, OnSwipeTouchListe
         context?.let {
             view?.setOnTouchListener(OnSwipeTouchListener(it, this))
         }
+
+        addAnimationOperations()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -95,6 +106,37 @@ abstract class BaseFragment: Fragment(), View.OnClickListener, OnSwipeTouchListe
         }else{
             cntBaseMonitor.visibility = View.GONE
         }
+    }
+
+    private fun addAnimationOperations() {
+        var set = false
+        val constraint1 = ConstraintSet()
+        constraint1.clone(windowRoot)
+        val constraint2 = ConstraintSet()
+        constraint2.clone(context, R.layout.window_base_bottom)
+
+        view?.findViewById<ImageView>(R.id.imgBaseMove)?.setOnClickListener{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                TransitionManager.beginDelayedTransition(windowRoot)
+                val constraint: ConstraintSet
+                val gravity: Int
+
+                val layoutParams = windowRoot.layoutParams as FrameLayout.LayoutParams
+
+                if(set) {
+                    constraint = constraint1
+                    gravity = Gravity.TOP
+                } else {
+                    constraint = constraint2
+                    gravity = Gravity.BOTTOM
+                }
+
+                layoutParams.gravity = gravity
+                constraint.applyTo(windowRoot)
+                set = !set
+            }
+        }
+
     }
 
     override fun onClick(v: View?) {
