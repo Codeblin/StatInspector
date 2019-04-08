@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.android.codeblins.core.Initializator
 import com.android.codeblins.core.NetworkStatInspector
 import com.android.codeblins.statinspector.R
+import com.android.codeblins.utils.Animations
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.window_base.*
 
@@ -15,8 +16,9 @@ import kotlinx.android.synthetic.main.window_base.*
  * Created by Codeblin S. on 3/20/2019.
  */
 
-abstract class BaseFragment: Fragment(){
+abstract class BaseFragment: Fragment(), View.OnClickListener{
     private var disposableStatSubscription: Disposable? = null
+    protected var isShown = true
 
     abstract fun getLayoutId(): Int
 
@@ -39,6 +41,8 @@ abstract class BaseFragment: Fragment(){
         frameBaseContent.addView(LayoutInflater.from(context).inflate(getLayoutId(), null, false))
         txtBaseTitle.text = getTitle()
 
+        imgBaseArrow.setOnClickListener(this)
+
         initLayout(view)
     }
 
@@ -58,5 +62,25 @@ abstract class BaseFragment: Fragment(){
     override fun onDestroyView() {
         super.onDestroyView()
         NetworkStatInspector.stopInspection()
+    }
+
+    private fun showMonitor(show: Boolean){
+        val radius = if(show) 180f else 0f
+        Animations.rotate(imgBaseArrow, radius)
+
+        if(show){
+            cntBaseMonitor.visibility = View.VISIBLE
+        }else{
+            cntBaseMonitor.visibility = View.GONE
+        }
+    }
+
+    override fun onClick(v: View?) {
+        when(v?.id){
+            R.id.imgBaseArrow -> {
+                isShown = !isShown
+                showMonitor(isShown)
+            }
+        }
     }
 }

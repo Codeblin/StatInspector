@@ -8,40 +8,53 @@
     android:background="@color/colorPrimaryDark"
     tools:background="#FF5722"
     android:elevation="8dp"
-    app:elevation="8dp">
+    app:elevation="8dp"
+    android:animateLayoutChanges="true">
 
-    <TextView
-        android:id="@+id/txtBaseTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textColor="@android:color/white"
-        tools:text="@string/title_traffic_monitor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <FrameLayout
-        android:id="@+id/frameBaseContent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cntBaseMonitor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@id/imgBaseArrow"
-        app:layout_constraintTop_toBottomOf="@+id/txtBaseTitle"
-        tools:background="@android:color/white" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/imgBaseArrow">
+
+        <TextView
+            android:id="@+id/txtBaseTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@android:color/white"
+            tools:text="@string/title_traffic_monitor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/frameBaseContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtBaseTitle"
+            tools:background="@android:color/white" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
         android:id="@+id/imgBaseArrow"
-        android:layout_width="20dp"
+        android:layout_width="match_parent"
         android:layout_height="20dp"
         android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_arrow"
+        android:rotation="180"
         android:clickable="true"
         android:focusable="true"
         android:tint="@android:color/white"
