@@ -28,6 +28,7 @@ import android.widget.FrameLayout
 
 abstract class BaseFragment: Fragment(), View.OnClickListener, OnSwipeTouchListener.SwipeDirectionListener {
     private var disposableStatSubscription: Disposable? = null
+    private var gravityInterceptor = GravityInterceptor()
     protected var isShown = true
 
     // =====================================================
@@ -98,8 +99,7 @@ abstract class BaseFragment: Fragment(), View.OnClickListener, OnSwipeTouchListe
     // =====================================================
 
     private fun showMonitor(show: Boolean){
-        val radius = if(show) 180f else 0f
-        Animations.rotate(imgBaseArrow, radius)
+        gravityInterceptor.rotateArrow(show)
 
         if(show){
             cntBaseMonitor.visibility = View.VISIBLE
@@ -109,34 +109,16 @@ abstract class BaseFragment: Fragment(), View.OnClickListener, OnSwipeTouchListe
     }
 
     private fun addAnimationOperations() {
-        var set = false
+        var set = true
         val constraint1 = ConstraintSet()
         constraint1.clone(windowRoot)
         val constraint2 = ConstraintSet()
         constraint2.clone(context, R.layout.window_base_bottom)
 
         view?.findViewById<ImageView>(R.id.imgBaseMove)?.setOnClickListener{
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                TransitionManager.beginDelayedTransition(windowRoot)
-                val constraint: ConstraintSet
-                val gravity: Int
-
-                val layoutParams = windowRoot.layoutParams as FrameLayout.LayoutParams
-
-                if(set) {
-                    constraint = constraint1
-                    gravity = Gravity.TOP
-                } else {
-                    constraint = constraint2
-                    gravity = Gravity.BOTTOM
-                }
-
-                layoutParams.gravity = gravity
-                constraint.applyTo(windowRoot)
-                set = !set
-            }
+            set = Animations.moveWindow(set, constraint1, constraint2, windowRoot)
+            gravityInterceptor.gravity = if(set) Gravity.BOTTOM else Gravity.TOP
         }
-
     }
 
     override fun onClick(v: View?) {
@@ -149,7 +131,29 @@ abstract class BaseFragment: Fragment(), View.OnClickListener, OnSwipeTouchListe
     }
 
     override fun onSwipe(direction: Direction) {
-        isShown = direction == Direction.DOWN
+        isShown = gravityInterceptor.getSwipeIntention(direction)
         showMonitor(isShown)
+    }
+
+    inner class GravityInterceptor {
+        var gravity = Gravity.BOTTOM
+            set(value) {
+                field = value
+                rotateArrow(isShown)
+            }
+
+        fun getSwipeIntention(direction: Direction): Boolean{
+            return if(gravity == Gravity.TOP) direction == Direction.DOWN else direction != Direction.DOWN
+        }
+
+        fun rotateArrow(show: Boolean){
+            val radius = if(show) {
+                if(gravity == Gravity.TOP) 180f else 0f
+            } else {
+                if(gravity == Gravity.TOP) 0f else 180f
+            }
+
+            Animations.rotate(imgBaseArrow, radius)
+        }
     }
 }

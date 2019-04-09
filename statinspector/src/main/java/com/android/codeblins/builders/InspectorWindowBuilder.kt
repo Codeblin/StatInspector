@@ -2,6 +2,7 @@ package com.android.codeblins.builders
 
 import android.content.Context
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.android.codeblins.core.Initializator.Companion.ARGS_HAS_LOGS
@@ -30,13 +31,13 @@ abstract class InspectorWindowBuilder(private val context: Context) : InspectorW
         val args = getExtraArguments()
         args.putBoolean(ARGS_HAS_LOGS, logs)
 
-        if (context is FragmentActivity){
+        if (context is AppCompatActivity){
             context.supportFragmentManager
                 .beginTransaction()
                 .add(android.R.id.content, getWindowWithArguments(args))
                 .commit()
         }else{
-            throw IllegalContextException("FragmentActivity is required for context")
+            throw IllegalContextException("AppCompatActivity is required for context")
         }
     }
 }

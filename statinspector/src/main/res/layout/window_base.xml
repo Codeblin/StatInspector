@@ -68,7 +68,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_arrow"
-        android:rotation="180"
         android:clickable="true"
         android:focusable="true"
         android:tint="@android:color/white"
