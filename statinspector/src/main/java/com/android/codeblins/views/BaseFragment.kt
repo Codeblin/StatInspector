@@ -1,25 +1,21 @@
 package com.android.codeblins.views
 
-import android.os.Build
 import android.os.Bundle
-import android.transition.TransitionManager
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
 import com.android.codeblins.core.Initializator
 import com.android.codeblins.core.NetworkStatInspector
 import com.android.codeblins.statinspector.R
-import com.android.codeblins.utils.*
+import com.android.codeblins.utils.Animations
+import com.android.codeblins.utils.Direction
+import com.android.codeblins.utils.OnSwipeTouchListener
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.window_base.*
-import android.view.Gravity
-import android.R.attr.gravity
-import android.widget.FrameLayout
-
 
 
 /**
